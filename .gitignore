@@ -4,7 +4,6 @@
 # But keep directories
 !*/
 
-# you can specify exceptions for certain files or directories inside those directories.
-# if you want to track .env or README files in subdirectories:
+# Keep markdown files and .env file anywhere in the project
 !*.md
 !.env
