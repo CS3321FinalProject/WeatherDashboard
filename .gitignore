@@ -1,0 +1,10 @@
+# Ignore everything
+/*
+
+# But keep directories
+!*/
+
+# you can specify exceptions for certain files or directories inside those directories.
+# if you want to track .env or README files in subdirectories:
+!*.md
+!.env
