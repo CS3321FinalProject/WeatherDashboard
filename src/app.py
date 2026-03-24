@@ -6,15 +6,10 @@ def create_app():
     load_dotenv()
 
     app = Flask(__name__)
-
-    # Import and register blueprint
-
     @app.route("/")
     def home():
         return {"message": "Weather Dashboard API is running"}
-
     return app
-
 
 if __name__ == "__main__":
     app = create_app()
