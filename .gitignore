@@ -7,3 +7,5 @@
 # Keep markdown files and .env file anywhere in the project
 !*.md
 !.envvenv/
+__pycache__/
+*.pyc
