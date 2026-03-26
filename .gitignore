@@ -6,4 +6,4 @@
 
 # Keep markdown files and .env file anywhere in the project
 !*.md
-!.env
+!.envvenv/
