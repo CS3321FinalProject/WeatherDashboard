@@ -1,16 +1,7 @@
-# Ignore everything
-/*
-
-# But keep directories
-!*/
-
 # Ignore env variables
 .env
 
-# Keep markdown files
-!*.md
-
-# Ignore python stuff
+# Ignore python stuff (virtual env, cache)
 venv/
 __pycache__/
 *.pyc
