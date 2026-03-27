@@ -4,8 +4,13 @@
 # But keep directories
 !*/
 
-# Keep markdown files and .env file anywhere in the project
+# Ignore env variables
+.env
+
+# Keep markdown files
 !*.md
-!.envvenv/
+
+# Ignore python stuff
+venv/
 __pycache__/
 *.pyc
