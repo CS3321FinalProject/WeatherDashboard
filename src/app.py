@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify 
 from dotenv import load_dotenv
-from src.services.weather_service import (get_weather_by_city,get_weather_by_coords,get_forecast_by_city)
+from src.services.weather_service import (get_weather_by_city, get_weather_by_coords, get_forecast_by_city)
 import os
 import requests
 
@@ -8,53 +8,81 @@ import requests
 load_dotenv()
 
 
-
 def create_app():
-#    load_dotenv()
-
     app = Flask(__name__)
+
     @app.route("/")
     def home():
         return {"message": "Weather Dashboard API is running"}
-    
 
-    @app.route("/weather", methods=["GET"]  )
+    @app.route("/weather", methods=["GET"])
     def get_weather():
         city = request.args.get("city")
-        if not city:
+
+        if not city or not city.strip():
             return jsonify({"error": "City parameter is required"}), 400
+        
+        city = city.strip()
+
         if len(city) < 2:
             return jsonify({"error": "City name must be at least 2 characters long"}), 400
+        
+        if len(city) > 50:
+            return jsonify({"error": "City name is too long"}), 400
+        
         if not city.replace(" ", "").isalpha():
             return jsonify({"error": "Invalid city name"}), 400
+
         try:
             weather_data = get_weather_by_city(city)
+
             if not weather_data or "currentConditions" not in weather_data:
                 return jsonify({"error": "City not found"}), 404
+
             current = weather_data["currentConditions"]
 
             return jsonify({
-            "city": weather_data["resolvedAddress"],
-            "temperature": current["temp"],
-            "conditions": current["conditions"],
-            "humidity": current["humidity"],
-            "wind_speed": current["windspeed"]
+                "city": weather_data["resolvedAddress"],
+                "temperature": current["temp"],
+                "conditions": current["conditions"],
+                "humidity": current["humidity"],
+                "wind_speed": current["windspeed"]
             })
         except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500 
+            return jsonify({"error": str(e)}), 500
 
-    @app.route("/weather/coords", methods=["GET"]   )
+    @app.route("/weather/coords", methods=["GET"])
     def get_weather_coords():
         lat = request.args.get("lat")
         lon = request.args.get("lon")
+
         if not lat or not lon:
             return jsonify({"error": "Latitude and longitude parameters are required"}), 400
+
+        if not lat.strip() or not lon.strip():
+            return jsonify({"error": "Latitude and longitude cannot be blank"}), 400
+
+        try:
+            lat = float(lat)
+            lon = float(lon)
+        except ValueError:
+            return jsonify({"error": "Latitude and longitude must be numbers"}), 400
+
+        if not (-90 <= lat <= 90):
+            return jsonify({"error": "Latitude must be between -90 and 90"}), 400
+
+        if not (-180 <= lon <= 180):
+            return jsonify({"error": "Longitude must be between -180 and 180"}), 400
+
         try:
             weather_data = get_weather_by_coords(lat, lon)
 
+            if not weather_data or "currentConditions" not in weather_data:
+                return jsonify({"error": "Location not found"}), 404
+
             current = weather_data["currentConditions"]
 
-            return jsonify({    
+            return jsonify({
                 "location": weather_data["resolvedAddress"],
                 "latitude": weather_data["latitude"],
                 "longitude": weather_data["longitude"],
@@ -64,19 +92,33 @@ def create_app():
                 "wind_speed": current["windspeed"]
             })
         except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500  
+            return jsonify({"error": str(e)}), 500
 
-    @app.route("/forecast", methods=["GET"]  )
+    @app.route("/forecast", methods=["GET"])
     def get_forecast():
         city = request.args.get("city")
-        if not city:
+
+        if not city or not city.strip():
             return jsonify({"error": "City parameter is required"}), 400
+        
+        city = city.strip()
+
         if len(city) < 2:
             return jsonify({"error": "City name must be at least 2 characters long"}), 400
+        
+        if len(city) > 50:
+            return jsonify({"error": "City name is too long"}), 400
+        
+        if not city.replace(" ", "").isalpha():
+            return jsonify({"error": "Invalid city name"}), 400
+
         try:
             forecast_data = get_forecast_by_city(city)
 
-            days = forecast_data["days"][:5]  # 5-day forecast
+            if not forecast_data or "days" not in forecast_data:
+                return jsonify({"error": "City not found"}), 404
+
+            days = forecast_data["days"][:5]
 
             cleaned = []
             for day in days:
@@ -92,18 +134,19 @@ def create_app():
                 "city": forecast_data["resolvedAddress"],
                 "forecast": cleaned
             })
-        
+
         except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500 
-        
+            return jsonify({"error": str(e)}), 500
+
     @app.route("/health", methods=["GET"])
     def health():
         return jsonify({
             "status": "ok",
             "message": "Weather API is alive"
         }), 200
-        
+
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
