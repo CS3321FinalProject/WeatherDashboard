@@ -9,36 +9,35 @@ def get_api_key():
     return api_key
 
 
+BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
+
+
 # Get current weather for a city
-# Example: get_weather_by_city("London")
 def get_weather_by_city(city):
     api_key = get_api_key()
 
-    # Call OpenWeatherMap API with the city name
-    url = "https://api.openweathermap.org/data/2.5/weather"
+    url = f"{BASE_URL}/{city}"
     params = {
-        "q": city,         # city name
-        "appid": api_key,  # our API key from environment
-        "units": "imperial"  # fahrenheit, change to "metric" for celsius
+        "key": api_key,
+        "unitGroup": "us",       
+        "include": "current"
     }
 
     response = requests.get(url, params=params)
-    response.raise_for_status()  # throws error if something goes wrong
-    return response.json()       # return weather data as JSON
+    response.raise_for_status()
+    return response.json()
 
 
 # Get current weather using latitude and longitude
-# Example: get_weather_by_coords(40.7128, -74.0060)
 def get_weather_by_coords(lat, lon):
     api_key = get_api_key()
 
-    # Call OpenWeatherMap API with coordinates instead of city name
-    url = "https://api.openweathermap.org/data/2.5/weather"
+    location = f"{lat},{lon}"
+    url = f"{BASE_URL}/{location}"
     params = {
-        "lat": lat,        # latitude
-        "lon": lon,        # longitude
-        "appid": api_key,
-        "units": "imperial"
+        "key": api_key,
+        "unitGroup": "us",
+        "include": "current"
     }
 
     response = requests.get(url, params=params)
@@ -46,20 +45,17 @@ def get_weather_by_coords(lat, lon):
     return response.json()
 
 
-# Get 5-day weather forecast for a city
-# Example: get_forecast_by_city("New York")
+# Get forecast for a city
 def get_forecast_by_city(city):
     api_key = get_api_key()
 
-    # Call the forecast endpoint (gives forecast every 3 hours for 5 days)
-    url = "https://api.openweathermap.org/data/2.5/forecast"
+    url = f"{BASE_URL}/{city}"
     params = {
-        "q": city,
-        "appid": api_key,
-        "units": "imperial"
+        "key": api_key,
+        "unitGroup": "us",
+        "include": "days"   # forecast data
     }
 
     response = requests.get(url, params=params)
     response.raise_for_status()
     return response.json()
-
