@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, abort
 import requests
 
 # import the validators (if/else) logic from validators.py
@@ -18,13 +18,13 @@ def register_weather_routes(app):
 
         error = _validate_city(city)
         if error:
-            return jsonify({"error": error}), 400
+            abort(400, description=error)
 
         try:
             weather_data = get_weather_by_city(city.strip())
 
             if not weather_data or "currentConditions" not in weather_data:
-                return jsonify({"error": "City not found"}), 404
+                abort(404, description="City not found")
 
             current = weather_data["currentConditions"]
 
@@ -37,7 +37,7 @@ def register_weather_routes(app):
             })
 
         except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500
+            abort(500, description=str(e))
 
 
     @app.route("/weather/coords", methods=["GET"])
@@ -47,13 +47,13 @@ def register_weather_routes(app):
 
         error = _validate_coords(lat, lon)
         if error:
-            return jsonify({"error": error}), 400
+            abort(400, description=error)
 
         try:
             weather_data = get_weather_by_coords(float(lat), float(lon))
 
             if not weather_data or "currentConditions" not in weather_data:
-                return jsonify({"error": "Location not found"}), 404
+                abort(404, description="Location not found")
 
             current = weather_data["currentConditions"]
 
@@ -68,7 +68,7 @@ def register_weather_routes(app):
             })
 
         except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500
+            abort(500, description=str(e))
 
 
     @app.route("/forecast", methods=["GET"])
@@ -77,13 +77,13 @@ def register_weather_routes(app):
 
         error = _validate_city(city)
         if error:
-            return jsonify({"error": error}), 400
+            abort(400, description=error)
 
         try:
             forecast_data = get_forecast_by_city(city.strip())
 
             if not forecast_data or "days" not in forecast_data:
-                return jsonify({"error": "City not found"}), 404
+                abort(404, description="City not found")
 
             days = forecast_data["days"][:5]
 
@@ -103,4 +103,4 @@ def register_weather_routes(app):
             })
 
         except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500
+            abort(500, description=str(e))
