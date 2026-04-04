@@ -3,5 +3,5 @@
 
 # Ignore python stuff (virtual env, cache)
 venv/
-__pycache__/
+**__pycache__/
 *.pyc
