@@ -1,6 +1,7 @@
 from flask import Flask
 from dotenv import load_dotenv
 from src.routes.weather_routes import register_weather_routes
+from src.utils.error_handlers import register_error_handlers
 import os
 
 # validator (if/else) logic for city and lat/long in validators.py
@@ -24,6 +25,7 @@ def create_app():
         }, 200
 
     register_weather_routes(app)
+    register_error_handlers(app)
 
     return app
 
