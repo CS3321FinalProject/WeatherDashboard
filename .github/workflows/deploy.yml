@@ -23,6 +23,7 @@ jobs:
         with:
           python-version: "3.11"
 
+
       - name: Install dependencies + run tests
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
@@ -36,3 +37,23 @@ jobs:
           else
             echo "No tests found yet — skipping test run"
           fi
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t weather-dashboard:latest .
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy placeholder
+        run: echo "Deploy step (to be implemented later)"
