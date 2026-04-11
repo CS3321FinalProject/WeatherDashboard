@@ -23,14 +23,19 @@ jobs:
         with:
           python-version: "3.11"
 
+
       - name: Install dependencies + run tests
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
         run: |
           pip install -r requirements.txt
           pip install pytest pytest-cov
-          doppler run -- pytest --cov=src
 
+          if find tests -name "test_*.py" | grep -q .; then
+            doppler run -- pytest --cov=src --cov-report=term
+          else
+            echo "No tests found yet — skipping test run"
+          fi
 
   build:
     runs-on: ubuntu-latest
