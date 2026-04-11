@@ -15,20 +15,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+
       - name: Setup Doppler
         uses: dopplerhq/cli-action@v3
+
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-
       - name: Install dependencies + run tests
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
         run: |
-          pip install -r requirements.txt
+          pip install uv
+          uv sync
           pip install pytest pytest-cov
 
           if find tests -name "test_*.py" | grep -q .; then
@@ -36,23 +38,3 @@ jobs:
           else
             echo "No tests found yet — skipping test run"
           fi
-
-  build:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t weather-dashboard:latest .
-
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Deploy placeholder
-        run: echo "Deploy step (to be implemented later)"
