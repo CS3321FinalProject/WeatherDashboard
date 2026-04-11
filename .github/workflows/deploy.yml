@@ -15,11 +15,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install Doppler CLI
-        run: |
-          curl -Ls https://cli.doppler.com/install.sh | sh
-          echo "$HOME/.doppler/bin" >> $GITHUB_PATH
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
