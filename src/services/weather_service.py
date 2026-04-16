@@ -1,11 +1,12 @@
 import os
 import requests
+from flask import abort
 
 # Get the API key from environment variables
 def get_api_key():
     api_key = os.getenv("WEATHER_API_KEY")
     if not api_key:
-        raise EnvironmentError("WEATHER_API_KEY not found. Please set it in your environment.")
+        abort(500, description="WEATHER_API_KEY not configured")
     return api_key
 
 

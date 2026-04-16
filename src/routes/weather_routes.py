@@ -11,7 +11,6 @@ from src.services.weather_service import (
 )
 
 def register_weather_routes(app):
-
     @app.route("/weather", methods=["GET"])
     def get_weather():
         city = request.args.get("city")
@@ -36,8 +35,8 @@ def register_weather_routes(app):
                 "wind_speed": current["windspeed"]
             })
 
-        except requests.exceptions.RequestException as e:
-            abort(500, description=str(e))
+            except Exception as e:
+                abort(500, description=str(e))
 
 
     @app.route("/weather/coords", methods=["GET"])
@@ -67,8 +66,8 @@ def register_weather_routes(app):
                 "wind_speed": current["windspeed"]
             })
 
-        except requests.exceptions.RequestException as e:
-            abort(500, description=str(e))
+            except Exception as e:
+                abort(500, description=str(e))
 
 
     @app.route("/forecast", methods=["GET"])
@@ -102,5 +101,5 @@ def register_weather_routes(app):
                 "forecast": cleaned
             })
 
-        except requests.exceptions.RequestException as e:
-            abort(500, description=str(e))
+            except Exception as e:
+                abort(500, description=str(e))
