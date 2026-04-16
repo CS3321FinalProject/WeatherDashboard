@@ -1,5 +1,6 @@
 import os
 import requests
+from flask import abort
 
 # Get the API key from environment variables
 def get_api_key():
