@@ -11,7 +11,6 @@ from src.services.weather_service import (
 )
 
 def register_weather_routes(app):
-
     @app.route("/weather", methods=["GET"])
     def get_weather():
         city = request.args.get("city")
