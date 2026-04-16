@@ -7,16 +7,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 ENV PYTHONPATH=/app
 
 CMD ["python", "run.py"]
-=======
-CMD ["python", "app.py"]
->>>>>>> c2257bda3a866f6bfe5d3332c4782393f6c54cf5
-=======
-ENV PYTHONPATH=/app
-
-CMD ["python", "run.py"]
->>>>>>> 1029eb912b8d160372f76593319489d281beaf1f
