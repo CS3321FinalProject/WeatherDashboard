@@ -1,5 +1,5 @@
 import pytest
-from src.utils.validators import _validate_city, _validate_coords
+from WeatherDashboard.utils.validators import _validate_city, _validate_coords
 
 
 class TestValidateCity:
