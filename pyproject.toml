@@ -5,6 +5,7 @@ requires-python = ">=3.11"
 dependencies = [
     "flask",
     "requests"
+    "python-dotenv"
 ]
 
 [project.optional-dependencies]
