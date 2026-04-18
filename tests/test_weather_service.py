@@ -74,3 +74,8 @@ def test_get_forecast_by_city(mock_get):
     assert result["city"]["name"] == "London"
     assert len(result["list"]) > 0
     mock_get.assert_called_once()
+
+def test_get_api_key_missing():
+    with patch.dict(os.environ, {}, clear=True):
+        with pytest.raises(EnvironmentError):
+            get_weather_by_city("London")

@@ -290,3 +290,9 @@ def test_get_forecast_service_error(mock_service, client):
 
     assert response.status_code == 500
     assert data["error"] == "Internal server error"
+
+def test_home_route(client):
+    response = client.get("/")
+    data = response.get_json()
+    assert response.status_code == 200
+    assert data["message"] == "Weather Dashboard API is running"
