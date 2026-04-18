@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import patch
-from src.app import create_app
-
+from WeatherDashboard.app import create_app
 
 # ---- SETUP ----
 
@@ -68,7 +67,7 @@ def test_health_check(client):
 
 # ---- /weather TESTS ----
 
-@patch("src.routes.weather_routes.get_weather_by_city")
+@patch("WeatherDashboard.routes.weather_routes.get_weather_by_city")
 def test_get_weather_success(mock_service, client):
     mock_service.return_value = MOCK_WEATHER
 
@@ -120,7 +119,7 @@ def test_get_weather_city_too_long(client):
     assert data["message"] == "City name is too long"
 
 
-@patch("src.routes.weather_routes.get_weather_by_city")
+@patch("WeatherDashboard.routes.weather_routes.get_weather_by_city")
 def test_get_weather_city_not_found(mock_service, client):
     mock_service.return_value = {}
 
@@ -132,7 +131,7 @@ def test_get_weather_city_not_found(mock_service, client):
     assert data["message"] == "City not found"
 
 
-@patch("src.routes.weather_routes.get_weather_by_city")
+@patch("WeatherDashboard.routes.weather_routes.get_weather_by_city")
 def test_get_weather_service_error(mock_service, client):
     import requests as req
     mock_service.side_effect = req.exceptions.RequestException("Connection failed")
@@ -146,7 +145,7 @@ def test_get_weather_service_error(mock_service, client):
 
 # ---- /weather/coords TESTS ----
 
-@patch("src.routes.weather_routes.get_weather_by_coords")
+@patch("WeatherDashboard.routes.weather_routes.get_weather_by_coords")
 def test_get_weather_coords_success(mock_service, client):
     mock_service.return_value = MOCK_WEATHER_COORDS
 
@@ -206,7 +205,7 @@ def test_get_weather_coords_out_of_range_lon(client):
     assert data["message"] == "Longitude must be between -180 and 180"
 
 
-@patch("src.routes.weather_routes.get_weather_by_coords")
+@patch("WeatherDashboard.routes.weather_routes.get_weather_by_coords")
 def test_get_weather_coords_not_found(mock_service, client):
     mock_service.return_value = {}
 
@@ -218,7 +217,7 @@ def test_get_weather_coords_not_found(mock_service, client):
     assert data["message"] == "Location not found"
 
 
-@patch("src.routes.weather_routes.get_weather_by_coords")
+@patch("WeatherDashboard.routes.weather_routes.get_weather_by_coords")
 def test_get_weather_coords_service_error(mock_service, client):
     import requests as req
     mock_service.side_effect = req.exceptions.RequestException("Connection failed")
@@ -232,7 +231,7 @@ def test_get_weather_coords_service_error(mock_service, client):
 
 # ---- /forecast TESTS ----
 
-@patch("src.routes.weather_routes.get_forecast_by_city")
+@patch("WeatherDashboard.routes.weather_routes.get_forecast_by_city")
 def test_get_forecast_success(mock_service, client):
     mock_service.return_value = MOCK_FORECAST
 
@@ -268,7 +267,7 @@ def test_get_forecast_invalid_city(client):
     assert data["message"] == "Invalid city name"
 
 
-@patch("src.routes.weather_routes.get_forecast_by_city")
+@patch("WeatherDashboard.routes.weather_routes.get_forecast_by_city")
 def test_get_forecast_city_not_found(mock_service, client):
     mock_service.return_value = {}
 
@@ -280,7 +279,7 @@ def test_get_forecast_city_not_found(mock_service, client):
     assert data["message"] == "City not found"
 
 
-@patch("src.routes.weather_routes.get_forecast_by_city")
+@patch("WeatherDashboard.routes.weather_routes.get_forecast_by_city")
 def test_get_forecast_service_error(mock_service, client):
     import requests as req
     mock_service.side_effect = req.exceptions.RequestException("Connection failed")

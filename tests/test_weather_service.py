@@ -1,7 +1,7 @@
 import pytest# ---- TESTS ----
 import os
 from unittest.mock import patch, Mock
-from src.services.weather_service import (
+from WeatherDashboard.services.weather_service import (
     get_weather_by_city,
     get_weather_by_coords,
     get_forecast_by_city
@@ -33,7 +33,7 @@ MOCK_FORECAST = {
 
 # Test 1: get_weather_by_city()
 @patch.dict(os.environ, {"WEATHER_API_KEY": "fake-key"})
-@patch("src.services.weather_service.requests.get")
+@patch("WeatherDashboard.services.weather_service.requests.get")
 def test_get_weather_by_city(mock_get):
     # Fake the API response
     mock_get.return_value = Mock(status_code=200)
@@ -48,7 +48,7 @@ def test_get_weather_by_city(mock_get):
 
 # Test 2: get_weather_by_coords()
 @patch.dict(os.environ, {"WEATHER_API_KEY": "fake-key"})
-@patch("src.services.weather_service.requests.get")
+@patch("WeatherDashboard.services.weather_service.requests.get")
 def test_get_weather_by_coords(mock_get):
     # Fake the API response
     mock_get.return_value = Mock(status_code=200)
@@ -63,7 +63,7 @@ def test_get_weather_by_coords(mock_get):
 
 # Test 3: get_forecast_by_city()
 @patch.dict(os.environ, {"WEATHER_API_KEY": "fake-key"})
-@patch("src.services.weather_service.requests.get")
+@patch("WeatherDashboard.services.weather_service.requests.get")
 def test_get_forecast_by_city(mock_get):
     # Fake the API response
     mock_get.return_value = Mock(status_code=200)

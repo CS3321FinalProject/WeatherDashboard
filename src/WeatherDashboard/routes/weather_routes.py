@@ -2,9 +2,9 @@ from flask import request, jsonify, abort
 import requests
 
 # import the validators (if/else) logic from validators.py
-from src.utils.validators import _validate_city, _validate_coords
+from WeatherDashboard.utils.validators import _validate_city, _validate_coords
 
-from src.services.weather_service import (
+from WeatherDashboard.services.weather_service import (
     get_weather_by_city,
     get_weather_by_coords,
     get_forecast_by_city
