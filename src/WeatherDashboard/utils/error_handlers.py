@@ -9,7 +9,7 @@ def register_error_handlers(app):
         return jsonify({
             "error": "Bad request",
             "message": getattr(e, "description", "Bad request"),
-            "cat_url": get_cat_url(status_code)
+            "cat_url": get_cat_url()
         }), status_code
 
     @app.errorhandler(404)
@@ -18,7 +18,7 @@ def register_error_handlers(app):
         return jsonify({
             "error": "Not found",
             "message": getattr(e, "description", "Not found"),
-            "cat_url": get_cat_url(status_code)
+            "cat_url": get_cat_url()
         }), status_code
 
     @app.errorhandler(500)
@@ -27,5 +27,5 @@ def register_error_handlers(app):
         return jsonify({
             "error": "Internal server error",
             "message": getattr(e, "description", "Internal server error"),
-            "cat_url": get_cat_url(status_code)
+            "cat_url": get_cat_url()
         }), status_code

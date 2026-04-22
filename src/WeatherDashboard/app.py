@@ -14,7 +14,7 @@ def create_app():
     def home():
         return {
             "message": "Weather Dashboard API is running",
-            "cat_url": "https://http.cat/200"
+            "cat_url": "https://cataas.com/cat"
         }
 
     @app.route("/health", methods=["GET"])

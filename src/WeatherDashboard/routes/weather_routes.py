@@ -35,7 +35,7 @@ def register_weather_routes(app):
                 "conditions": current.get("conditions"),
                 "humidity": current.get("humidity"),
                 "wind_speed": current.get("windspeed"),
-                "cat_url": get_cat_url(200)
+                "cat_url": get_cat_url()
             })
 
         except requests.exceptions.RequestException:
@@ -69,7 +69,7 @@ def register_weather_routes(app):
                 "conditions": current.get("conditions"),
                 "humidity": current.get("humidity"),
                 "wind_speed": current.get("windspeed"),
-                "cat_url": get_cat_url(200)
+                "cat_url": get_cat_url()
             })
 
         except requests.exceptions.RequestException:
@@ -101,14 +101,13 @@ def register_weather_routes(app):
                     "temp": day.get("temp"),
                     "temp_max": day.get("tempmax"),
                     "temp_min": day.get("tempmin"),
-                    "conditions": day.get("conditions"),
-                    "cat_url": get_cat_url(200)
+                    "conditions": day.get("conditions")
                 })
 
             return jsonify({
                 "city": forecast_data.get("resolvedAddress"),
                 "forecast": cleaned,
-                "cat_url": get_cat_url(200)
+                "cat_url": get_cat_url()
             })
 
         except requests.exceptions.RequestException:
