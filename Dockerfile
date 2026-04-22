@@ -8,6 +8,6 @@ COPY . .
 
 RUN uv sync
 
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/src
 
-CMD ["python", "run.py"]
+CMD ["uv", "run", "python", "run.py"]

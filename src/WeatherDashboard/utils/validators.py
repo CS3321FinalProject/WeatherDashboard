@@ -1,3 +1,5 @@
+from werkzeug.exceptions import BadRequest
+
 def _validate_city(city):
     if not city or not city.strip():
         return "City parameter is required"
