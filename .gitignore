@@ -1,8 +1,15 @@
-# Ignore env variables
-.env
-
 # Ignore python stuff (virtual env, cache)
 .venv/
 __pycache__/
 .pytest_cache/
 *.pyc
+*.pyo
+
+# Coverage
+.coverage
+htmlcov/
+
+# Packaging
+**/*.egg-info/
+dist/
+build/

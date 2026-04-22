@@ -1,9 +1,8 @@
 from flask import request, jsonify, abort
 import requests
 
-# import the validators (if/else) logic from validators.py
 from WeatherDashboard.utils.validators import _validate_city, _validate_coords
-
+from WeatherDashboard.services.http_cats_service import get_cat_url
 from WeatherDashboard.services.weather_service import (
     get_weather_by_city,
     get_weather_by_coords,
@@ -11,6 +10,8 @@ from WeatherDashboard.services.weather_service import (
 )
 
 def register_weather_routes(app):
+
+    # ---------------- WEATHER BY CITY ----------------
     @app.route("/weather", methods=["GET"])
     def get_weather():
         city = request.args.get("city")
@@ -20,25 +21,28 @@ def register_weather_routes(app):
             abort(400, description=error)
 
         try:
-            weather_data = get_weather_by_city(city.strip())
+            result = get_weather_by_city(city.strip())
+            weather_data = result.get("data")
 
-            if not weather_data or "currentConditions" not in weather_data:
+            if not weather_data or not weather_data.get("currentConditions"):
                 abort(404, description="City not found")
 
             current = weather_data["currentConditions"]
 
             return jsonify({
-                "city": weather_data["resolvedAddress"],
-                "temperature": current["temp"],
-                "conditions": current["conditions"],
-                "humidity": current["humidity"],
-                "wind_speed": current["windspeed"]
+                "city": weather_data.get("resolvedAddress"),
+                "temperature": current.get("temp"),
+                "conditions": current.get("conditions"),
+                "humidity": current.get("humidity"),
+                "wind_speed": current.get("windspeed"),
+                "cat_url": get_cat_url()
             })
 
-        except requests.exceptions.RequestException as e:
-            abort(500, description=str(e))
+        except requests.exceptions.RequestException:
+            abort(500, description="Internal server error")
 
 
+    # ---------------- WEATHER BY COORDS ----------------
     @app.route("/weather/coords", methods=["GET"])
     def get_weather_coords():
         lat = request.args.get("lat")
@@ -49,27 +53,30 @@ def register_weather_routes(app):
             abort(400, description=error)
 
         try:
-            weather_data = get_weather_by_coords(float(lat), float(lon))
+            result = get_weather_by_coords(float(lat), float(lon))
+            weather_data = result.get("data")
 
-            if not weather_data or "currentConditions" not in weather_data:
+            if not weather_data or not weather_data.get("currentConditions"):
                 abort(404, description="Location not found")
 
             current = weather_data["currentConditions"]
 
             return jsonify({
-                "location": weather_data["resolvedAddress"],
-                "latitude": weather_data["latitude"],
-                "longitude": weather_data["longitude"],
-                "temperature": current["temp"],
-                "conditions": current["conditions"],
-                "humidity": current["humidity"],
-                "wind_speed": current["windspeed"]
+                "location": weather_data.get("resolvedAddress"),
+                "latitude": weather_data.get("latitude"),
+                "longitude": weather_data.get("longitude"),
+                "temperature": current.get("temp"),
+                "conditions": current.get("conditions"),
+                "humidity": current.get("humidity"),
+                "wind_speed": current.get("windspeed"),
+                "cat_url": get_cat_url()
             })
 
-        except requests.exceptions.RequestException as e:
-            abort(500, description=str(e))
+        except requests.exceptions.RequestException:
+            abort(500, description="Internal server error")
 
 
+    # ---------------- FORECAST ----------------
     @app.route("/forecast", methods=["GET"])
     def get_forecast():
         city = request.args.get("city")
@@ -79,9 +86,10 @@ def register_weather_routes(app):
             abort(400, description=error)
 
         try:
-            forecast_data = get_forecast_by_city(city.strip())
+            result = get_forecast_by_city(city.strip())
+            forecast_data = result.get("data")
 
-            if not forecast_data or "days" not in forecast_data:
+            if not forecast_data or not forecast_data.get("days"):
                 abort(404, description="City not found")
 
             days = forecast_data["days"][:5]
@@ -89,17 +97,18 @@ def register_weather_routes(app):
             cleaned = []
             for day in days:
                 cleaned.append({
-                    "date": day["datetime"],
-                    "temp": day["temp"],
-                    "temp_max": day["tempmax"],
-                    "temp_min": day["tempmin"],
-                    "conditions": day["conditions"]
+                    "date": day.get("datetime"),
+                    "temp": day.get("temp"),
+                    "temp_max": day.get("tempmax"),
+                    "temp_min": day.get("tempmin"),
+                    "conditions": day.get("conditions")
                 })
 
             return jsonify({
-                "city": forecast_data["resolvedAddress"],
-                "forecast": cleaned
+                "city": forecast_data.get("resolvedAddress"),
+                "forecast": cleaned,
+                "cat_url": get_cat_url()
             })
 
-        except requests.exceptions.RequestException as e:
-            abort(500, description=str(e))
+        except requests.exceptions.RequestException:
+            abort(500, description="Internal server error")

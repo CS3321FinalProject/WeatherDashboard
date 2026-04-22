@@ -1,4 +1,4 @@
-from src.app import create_app
+from WeatherDashboard.app import create_app
 
 app = create_app()
 

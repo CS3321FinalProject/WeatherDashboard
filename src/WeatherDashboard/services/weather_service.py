@@ -1,5 +1,6 @@
 import os
 import requests
+from WeatherDashboard.services.http_cats_service import get_cat_url
 
 # Get the API key from environment variables
 def get_api_key():
@@ -7,7 +8,6 @@ def get_api_key():
     if not api_key:
         raise EnvironmentError("WEATHER_API_KEY not configured")
     return api_key
-
 
 BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
 
@@ -19,13 +19,16 @@ def get_weather_by_city(city):
     url = f"{BASE_URL}/{city}"
     params = {
         "key": api_key,
-        "unitGroup": "us",       
+        "unitGroup": "us",
         "include": "current"
     }
 
     response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json()
+
+    return {
+        "status_code": response.status_code,
+        "data": response.json()
+    }
 
 
 # Get current weather using latitude and longitude
@@ -41,9 +44,11 @@ def get_weather_by_coords(lat, lon):
     }
 
     response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json()
 
+    return {
+        "status_code": response.status_code,
+        "data": response.json()
+    }
 
 # Get forecast for a city
 def get_forecast_by_city(city):
@@ -53,9 +58,12 @@ def get_forecast_by_city(city):
     params = {
         "key": api_key,
         "unitGroup": "us",
-        "include": "days"   # forecast data
+        "include": "days"
     }
 
     response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json()
+    
+    return {
+        "status_code": response.status_code,
+        "data": response.json()
+    }
