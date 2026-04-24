@@ -47,7 +47,11 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: coverage/lcov.info
+<<<<<<< HEAD
           min_coverage: 80
+=======
+          min_coverage: 70
+>>>>>>> bdde23a (workflow pipeline test.)
           exclude: '**/__init__.py tests/**'
 
   build:
