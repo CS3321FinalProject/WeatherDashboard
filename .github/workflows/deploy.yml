@@ -91,12 +91,21 @@ jobs:
           host: ${{ steps.doppler.outputs.AWS_IP }}
           username: ${{ steps.doppler.outputs.AWS_EC2_USERNAME }}
           key: ${{ steps.doppler.outputs.SSH_AWS_PEM }}
-          envs: DOPPLER_TOKEN
           script: |
+            set -e
+
             sudo docker rm -f weather-dashboard || true
             sudo docker pull thewhimsicalknight/weather-dashboard:latest
+
+            WEATHER_API_KEY=$(doppler secrets get WEATHER_API_KEY --plain)
+
+            if [ -z "$WEATHER_API_KEY" ]; then
+              echo "ERROR: WEATHER_API_KEY is empty"
+              exit 1
+            fi
+
             sudo docker run -d --name weather-dashboard -p 80:5000 \
-              -e DOPPLER_TOKEN="$DOPPLER_TOKEN" \
+              -e WEATHER_API_KEY="$WEATHER_API_KEY" \
               thewhimsicalknight/weather-dashboard:latest
 
         
