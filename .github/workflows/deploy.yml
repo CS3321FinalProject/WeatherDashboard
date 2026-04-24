@@ -47,7 +47,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: coverage/lcov.info
-          min_coverage: 70
+          min_coverage: 80
           exclude: '**/__init__.py tests/**'
 
   build:
